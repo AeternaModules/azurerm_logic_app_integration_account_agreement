@@ -37,5 +37,85 @@ EOT
       value     = string
     })
   }))
+  validation {
+    condition = alltrue([
+      for k, v in var.logic_app_integration_account_agreements : (
+        v.metadata == null || (length(v.metadata) > 0)
+      )
+    ])
+    error_message = "must not be empty"
+  }
+  # --- Unconfirmed validation candidates, derived from azurerm_logic_app_integration_account_agreement's provider source ---
+  # Not auto-enabled: either a bespoke provider validator we can't safely translate,
+  # or a path that crosses a list-typed block (needs its own for_each wrapping).
+  # Review, translate into a real validation{} block above, and delete once confirmed.
+  # path: name
+  #   source:    [from validate.IntegrationAccountAgreementName] !ok
+  # path: name
+  #   condition: length(value) <= 80
+  #   message:   [from validate.IntegrationAccountAgreementName: invalid when len(value) > 80]
+  #   source:    [from validate.IntegrationAccountAgreementName: invalid when len(value) > 80]
+  # path: name
+  #   source:    [from validate.IntegrationAccountAgreementName] !regexp.MustCompile(`^[A-Za-z0-9-().]+$`).MatchString(v)
+  # path: resource_group_name
+  #   condition: length(value) <= 90
+  #   message:   [from resourcegroups.ValidateName: invalid when len(value) > 90]
+  #   source:    [from resourcegroups.ValidateName: invalid when len(value) > 90]
+  # path: resource_group_name
+  #   condition: !endswith(value, ".")
+  #   message:   [from resourcegroups.ValidateName: must not end with "."]
+  #   source:    [from resourcegroups.ValidateName: must not end with "."]
+  # path: resource_group_name
+  #   condition: length(value) != 0
+  #   message:   [from resourcegroups.ValidateName: invalid when len(value) == 0]
+  #   source:    [from resourcegroups.ValidateName: invalid when len(value) == 0]
+  # path: resource_group_name
+  #   source:    [from resourcegroups.ValidateName] !matched
+  # path: integration_account_name
+  #   source:    validate.IntegrationAccountName: no recognizable `if ... { errors = append(...) }` pattern - read it by hand
+  # path: agreement_type
+  #   source:    validation.StringInSlice value list is not a literal []string - likely a generated PossibleValuesFor*() helper; resolve separately
+  # path: content
+  #   source:    validation.StringIsJSON(...) - no translation rule yet, add one
+  # path: guest_identity.qualifier
+  #   source:    [from validate.IntegrationAccountPartnerBusinessIdentityQualifier] !ok
+  # path: guest_identity.qualifier
+  #   source:    [from validate.IntegrationAccountPartnerBusinessIdentityQualifier] !regexp.MustCompile(`^[A-Za-z0-9]+$`).MatchString(v)
+  # path: guest_identity.value
+  #   source:    [from validate.IntegrationAccountPartnerBusinessIdentityValue] !ok
+  # path: guest_identity.value
+  #   condition: length(value) <= 128
+  #   message:   [from validate.IntegrationAccountPartnerBusinessIdentityValue: invalid when len(value) > 128]
+  #   source:    [from validate.IntegrationAccountPartnerBusinessIdentityValue: invalid when len(value) > 128]
+  # path: guest_identity.value
+  #   source:    [from validate.IntegrationAccountPartnerBusinessIdentityValue] !regexp.MustCompile(`^[A-Za-z0-9-() ._]+$`).MatchString(v)
+  # path: guest_partner_name
+  #   source:    [from validate.IntegrationAccountPartnerName] !ok
+  # path: guest_partner_name
+  #   condition: length(value) <= 80
+  #   message:   [from validate.IntegrationAccountPartnerName: invalid when len(value) > 80]
+  #   source:    [from validate.IntegrationAccountPartnerName: invalid when len(value) > 80]
+  # path: guest_partner_name
+  #   source:    [from validate.IntegrationAccountPartnerName] !regexp.MustCompile(`^[A-Za-z0-9-().]+$`).MatchString(v)
+  # path: host_identity.qualifier
+  #   source:    [from validate.IntegrationAccountPartnerBusinessIdentityQualifier] !ok
+  # path: host_identity.qualifier
+  #   source:    [from validate.IntegrationAccountPartnerBusinessIdentityQualifier] !regexp.MustCompile(`^[A-Za-z0-9]+$`).MatchString(v)
+  # path: host_identity.value
+  #   source:    [from validate.IntegrationAccountPartnerBusinessIdentityValue] !ok
+  # path: host_identity.value
+  #   condition: length(value) <= 128
+  #   message:   [from validate.IntegrationAccountPartnerBusinessIdentityValue: invalid when len(value) > 128]
+  #   source:    [from validate.IntegrationAccountPartnerBusinessIdentityValue: invalid when len(value) > 128]
+  # path: host_identity.value
+  #   source:    [from validate.IntegrationAccountPartnerBusinessIdentityValue] !regexp.MustCompile(`^[A-Za-z0-9-() ._]+$`).MatchString(v)
+  # path: host_partner_name
+  #   source:    [from validate.IntegrationAccountPartnerName] !ok
+  # path: host_partner_name
+  #   condition: length(value) <= 80
+  #   message:   [from validate.IntegrationAccountPartnerName: invalid when len(value) > 80]
+  #   source:    [from validate.IntegrationAccountPartnerName: invalid when len(value) > 80]
+  # path: host_partner_name
+  #   source:    [from validate.IntegrationAccountPartnerName] !regexp.MustCompile(`^[A-Za-z0-9-().]+$`).MatchString(v)
 }
 
