@@ -37,14 +37,6 @@ EOT
       value     = string
     })
   }))
-  validation {
-    condition = alltrue([
-      for k, v in var.logic_app_integration_account_agreements : (
-        v.metadata == null || (length(v.metadata) > 0)
-      )
-    ])
-    error_message = "must not be empty"
-  }
   # --- Unconfirmed validation candidates, derived from azurerm_logic_app_integration_account_agreement's provider source ---
   # Not auto-enabled: either a bespoke provider validator we can't safely translate,
   # or a path that crosses a list-typed block (needs its own for_each wrapping).
@@ -117,5 +109,8 @@ EOT
   #   source:    [from validate.IntegrationAccountPartnerName: invalid when len(value) > 80]
   # path: host_partner_name
   #   source:    [from validate.IntegrationAccountPartnerName] !regexp.MustCompile(`^[A-Za-z0-9-().]+$`).MatchString(v)
+  # path: metadata[*]
+  #   condition: length(value) > 0
+  #   message:   must not be empty
 }
 
