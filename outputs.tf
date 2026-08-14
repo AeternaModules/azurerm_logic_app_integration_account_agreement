@@ -12,7 +12,7 @@ output "logic_app_integration_account_agreements_content" {
 }
 output "logic_app_integration_account_agreements_guest_identity" {
   description = "Map of guest_identity values across all logic_app_integration_account_agreements, keyed the same as var.logic_app_integration_account_agreements"
-  value       = { for k, v in azurerm_logic_app_integration_account_agreement.logic_app_integration_account_agreements : k => v.guest_identity if v.guest_identity != null && length(v.guest_identity) > 0 }
+  value       = { for k, v in azurerm_logic_app_integration_account_agreement.logic_app_integration_account_agreements : k => one(v.guest_identity) if v.guest_identity != null && length(v.guest_identity) > 0 }
 }
 output "logic_app_integration_account_agreements_guest_partner_name" {
   description = "Map of guest_partner_name values across all logic_app_integration_account_agreements, keyed the same as var.logic_app_integration_account_agreements"
@@ -20,7 +20,7 @@ output "logic_app_integration_account_agreements_guest_partner_name" {
 }
 output "logic_app_integration_account_agreements_host_identity" {
   description = "Map of host_identity values across all logic_app_integration_account_agreements, keyed the same as var.logic_app_integration_account_agreements"
-  value       = { for k, v in azurerm_logic_app_integration_account_agreement.logic_app_integration_account_agreements : k => v.host_identity if v.host_identity != null && length(v.host_identity) > 0 }
+  value       = { for k, v in azurerm_logic_app_integration_account_agreement.logic_app_integration_account_agreements : k => one(v.host_identity) if v.host_identity != null && length(v.host_identity) > 0 }
 }
 output "logic_app_integration_account_agreements_host_partner_name" {
   description = "Map of host_partner_name values across all logic_app_integration_account_agreements, keyed the same as var.logic_app_integration_account_agreements"
